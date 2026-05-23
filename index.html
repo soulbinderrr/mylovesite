@@ -7,6 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
 
     <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
@@ -37,7 +42,7 @@
         .nav-bar {
             position: fixed;
             top: 15px;
-            left: 49%;
+            left: 50%;
             transform: translateX(-50%);
             z-index: 10;
             display: flex;
@@ -78,10 +83,10 @@
         .screen {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(15px);
-            padding: 30px;
+            padding: 25px 20px;
             border-radius: 28px;
-            width: 85%;
-            max-width: 320px;
+            width: 90%;
+            max-width: 300px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.3);
             position: absolute;
@@ -99,54 +104,151 @@
             transform: translateY(0);
         }
 
-        .names {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ff4d6d;
-            margin-bottom: 15px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+.names {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ff4d6d;
+    margin-bottom: 12px;
+    margin-top: 15px;       /* 👈 добавь */
+    cursor: pointer;
+}
 
-        .days-number {
-            font-size: 4rem;
-            font-weight: bold;
-            color: #ff4d6d;
-        }
+.days-number {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #ff4d6d;
+    margin-top: 5px;        /* 👈 добавь */
+}
 
         .days-label {
             color: #555;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* Обёртка для плавного перехода картинок */
+        .main-image-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 220px;
+            height: 220px;
+            margin: 0 auto;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            outline: none;
         }
 
         .main-image {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 250px;
+            height: 100%;
+            object-fit: contain;
             border-radius: 20px;
-            margin-top: 15px;
-            margin-left: 17px;
-            display: block;
+            transition: opacity 0.8s ease;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .main-image.top {
+            opacity: 0;
+        }
+
+        /* Облачко с комплиментом */
+        .compliment-cloud {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #ff4d6d;
+            font-weight: 600;
+            pointer-events: none;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.2);
+            border: 1px solid rgba(255, 77, 109, 0.2);
+            animation: cloudFloat 3.5s ease-out forwards;
+            text-align: center;
+            max-width: 180px;
+            left: 0;
+            top: 0;
+        }
+
+        .compliment-cloud::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid rgba(255, 255, 255, 0.95);
+        }
+
+        @keyframes cloudFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(15px) scale(0.7);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            70% {
+                opacity: 1;
+                transform: translateY(-50px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-90px) scale(0.85);
+            }
         }
 
         h2 {
             font-family: 'Dancing Script', cursive;
             color: #ff4d6d;
+            margin-bottom: 12px;
         }
 
         .screen p {
             color: #555;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
+
+        .btn {
+            border: none;
+            padding: 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.2s;
+            color: white;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-back { background: #e0e0e0; color: #555; margin-top: 15px; }
 
         .photo-strip {
             display: flex;
             overflow-x: auto;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
             padding-bottom: 10px;
         }
 
         .photo-strip img {
-            height: 200px;
+            height: 180px;
             border-radius: 15px;
             flex-shrink: 0;
             border: 2px solid white;
@@ -161,8 +263,8 @@
 
         /* Заглушка загрузки фото */
         .photo-loading {
-            height: 200px;
-            min-width: 140px;
+            height: 180px;
+            min-width: 130px;
             border-radius: 15px;
             flex-shrink: 0;
             background: rgba(255,255,255,0.3);
@@ -211,7 +313,7 @@
         .lightbox.active { display: flex; }
 
         .lightbox img {
-            max-width: 80%;
+            max-width: 85%;
             max-height: 85vh;
             border-radius: 20px;
             border: 3px solid white;
@@ -226,22 +328,22 @@
             top: 50%;
             transform: translateY(-50%);
             color: white;
-            font-size: 3rem;
+            font-size: 2.5rem;
             cursor: pointer;
             z-index: 10001;
             transition: 0.2s;
-            padding: 20px;
+            padding: 15px;
             user-select: none;
         }
 
         .lightbox-arrow:hover { color: #ff4d6d; transform: translateY(-50%) scale(1.2); }
-        .lightbox-prev { left: 20px; }
-        .lightbox-next { right: 20px; }
+        .lightbox-prev { left: 10px; }
+        .lightbox-next { right: 10px; }
 
         .lightbox-close {
             position: absolute;
-            top: 25px;
-            right: 30px;
+            top: 20px;
+            right: 25px;
             color: white;
             font-size: 2.5rem;
             cursor: pointer;
@@ -253,7 +355,7 @@
 
         .lightbox-counter {
             position: absolute;
-            bottom: 30px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             color: rgba(255,255,255,0.7);
@@ -290,21 +392,20 @@
             pointer-events: none;
             z-index: 2;
             animation: rainFall linear infinite;
-            opacity: 0.35;
-            font-size: 18px;
+            opacity: 0.3;
+            font-size: 16px;
         }
 
         @keyframes rainFall {
-            0% { transform: translateY(-5vh) rotate(0deg); opacity: 0.4; }
-            80% { opacity: 0.35; }
+            0% { transform: translateY(-5vh) rotate(0deg); opacity: 0.35; }
+            80% { opacity: 0.3; }
             100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
         }
 
         /* Горизонтальная ориентация */
         @media (orientation: landscape) {
             .screen {
-                margin-top: 60px;
-                margin-right: 17px;
+                margin-top: 70px;
             }
         }
     </style>
@@ -327,18 +428,27 @@
         <div class="lightbox-counter" id="lightbox-counter"></div>
     </div>
 
+    <!-- Главный экран -->
     <div id="screen-main" class="screen active">
         <div class="names" onclick="toggleNames()" id="pair-names">Соня + Вова</div>
         <div class="days-number" id="counter">0</div>
         <div class="days-label">дней вместе</div>
-        <img src="7.png" alt="Соня и Вова" class="main-image">
+
+        <div class="main-image-wrapper" id="main-image-wrapper">
+            <img src="7.png" alt="Соня и Вова" class="main-image bottom" id="main-image-bottom">
+            <!-- ЗАМЕНИ 8.png НА ИМЯ ВТОРОЙ PNG -->
+            <img src="9.png" alt="Соня и Вова" class="main-image top" id="main-image-top">
+        </div>
     </div>
 
+    <!-- Экран истории -->
     <div id="screen-history" class="screen">
         <h2>Напоминание ❤️</h2>
         <p>Соня, я люблю тебя и дорожу нашими отношениями. Ты лучшее, что есть в моей жизни, самое яркое солнышко, самый милый котёнок</p>
+        <button class="btn btn-back" onclick="showScreen('screen-main')">← На главную</button>
     </div>
 
+    <!-- Экран фото -->
     <div id="screen-photos" class="screen">
         <h2>Наши моменты</h2>
         <div class="photo-strip" id="photo-strip">
@@ -348,6 +458,7 @@
             <div class="photo-loading" data-src="4.jpg"><div class="spinner"></div></div>
             <div class="photo-loading" data-src="5.jpg"><div class="spinner"></div></div>
         </div>
+        <button class="btn btn-back" onclick="showScreen('screen-main')">← На главную</button>
     </div>
 
     <script>
@@ -357,19 +468,6 @@
             btn.addEventListener('click', () => {
                 const screenId = btn.getAttribute('data-screen');
                 showScreen(screenId);
-                navButtons.forEach(b => {
-                    b.classList.remove('active');
-                    if (b.getAttribute('data-screen') === 'screen-history') {
-                        b.innerHTML = '❤️';
-                    }
-                    if (b.getAttribute('data-screen') === 'screen-photos') {
-                        b.innerHTML = '📷 Фото';
-                    }
-                });
-                btn.classList.add('active');
-                if (screenId === 'screen-history') {
-                    btn.innerHTML = '🤍';
-                }
             });
         });
 
@@ -378,6 +476,22 @@
             setTimeout(() => {
                 const screen = document.getElementById(id);
                 screen.classList.add('active');
+
+                navButtons.forEach(b => {
+                    b.classList.remove('active');
+                    if (b.getAttribute('data-screen') === 'screen-history') {
+                        b.innerHTML = '❤️';
+                    }
+                    if (b.getAttribute('data-screen') === 'screen-photos') {
+                        b.innerHTML = '📷 Фото';
+                    }
+                    if (b.getAttribute('data-screen') === id) {
+                        b.classList.add('active');
+                        if (id === 'screen-history') {
+                            b.innerHTML = '🤍';
+                        }
+                    }
+                });
             }, 0);
         }
 
@@ -391,6 +505,62 @@
         const days = Math.floor((new Date() - new Date(2025, 6, 13)) / (1000 * 60 * 60 * 24));
         document.getElementById('counter').innerText = days;
 
+        // === КОМПЛИМЕНТЫ ===
+        const compliments = [
+            "Ты — моё солнышко ☀️",
+            "Ты самый прелестный котёночек ✨",
+            "С тобой я счастлив 💕",
+            "Ты самая красивая 🌸",
+            "Ты — лучшее в моей жизни 🍀",
+            "С тобой мне хорошо 🥰",
+            "Хочу быть рядом 🥹",
+            "Спасибо, что ты есть 💖",
+            "Ты — моя самая милая 🐱",
+            "Я по тебе скучаю 🥹"
+        ];
+
+        function getRandomCompliment() {
+            return compliments[Math.floor(Math.random() * compliments.length)];
+        }
+
+        function showComplimentCloud(wrapperRect) {
+            const cloud = document.createElement('div');
+            cloud.className = 'compliment-cloud';
+            cloud.innerText = getRandomCompliment();
+
+            // Облачко в пределах картинки
+            const cloudWidth = 160;
+            const cloudHeight = 60;
+            const minX = wrapperRect.left;
+            const maxX = wrapperRect.right - cloudWidth;
+            const minY = wrapperRect.top - 20;
+            const maxY = wrapperRect.bottom - cloudHeight - 20;
+
+            const randomX = Math.max(minX, Math.min(maxX, minX + Math.random() * (maxX - minX)));
+            const randomY = Math.max(minY, Math.min(maxY, minY + Math.random() * (maxY - minY)));
+
+            cloud.style.left = randomX + 'px';
+            cloud.style.top = randomY + 'px';
+
+            document.body.appendChild(cloud);
+            cloud.addEventListener('animationend', () => cloud.remove());
+        }
+
+        // === ПЕРЕКЛЮЧЕНИЕ ГЛАВНОЙ КАРТИНКИ (один раз) ===
+        const imgTop = document.getElementById('main-image-top');
+        const wrapper = document.getElementById('main-image-wrapper');
+        let hasSwitched = false;
+
+        wrapper.addEventListener('click', () => {
+            const rect = wrapper.getBoundingClientRect();
+            showComplimentCloud(rect);
+
+            if (!hasSwitched) {
+                imgTop.style.opacity = '1';
+                hasSwitched = true;
+            }
+        });
+
         // === ЛАЙТБОКС ===
         let currentPhotoIndex = 0;
         let photosArray = [];
@@ -399,29 +569,26 @@
             photosArray = Array.from(document.querySelectorAll('#photo-strip img'));
         }
 
-// Ленивая загрузка фото
-document.querySelectorAll('.photo-loading').forEach(placeholder => {
-    const src = placeholder.getAttribute('data-src');
-    const img = new Image();
-    img.onload = () => {
-        // Создаём новый img элемент
-        const newImg = document.createElement('img');
-        newImg.className = 'loaded';
-        newImg.src = src;
-        newImg.alt = src;
-        // Заменяем заглушку на фото
-        placeholder.replaceWith(newImg);
-        updatePhotosArray();
-        newImg.addEventListener('click', () => {
-            const index = photosArray.indexOf(newImg);
-            if (index >= 0) openLightbox(index);
+        document.querySelectorAll('.photo-loading').forEach(placeholder => {
+            const src = placeholder.getAttribute('data-src');
+            const img = new Image();
+            img.onload = () => {
+                const newImg = document.createElement('img');
+                newImg.className = 'loaded';
+                newImg.src = src;
+                newImg.alt = src;
+                placeholder.replaceWith(newImg);
+                updatePhotosArray();
+                newImg.addEventListener('click', () => {
+                    const index = photosArray.indexOf(newImg);
+                    if (index >= 0) openLightbox(index);
+                });
+            };
+            img.onerror = () => {
+                placeholder.innerHTML = '❌';
+            };
+            img.src = src;
         });
-    };
-    img.onerror = () => {
-        placeholder.innerHTML = '❌';
-    };
-    img.src = src; // Запускаем загрузку
-});
 
         function openLightbox(index) {
             currentPhotoIndex = index;
@@ -485,14 +652,13 @@ document.querySelectorAll('.photo-loading').forEach(placeholder => {
             return heart;
         }
 
-        // Дождь из сердечек
         function createRainHeart() {
             const heart = createHeartElement('rain-heart', {
                 left: Math.random() * 100 + '%',
                 fontSize: (Math.random() * 12 + 12) + 'px',
                 animationDuration: (Math.random() * 8 + 12) + 's',
                 animationDelay: Math.random() * 10 + 's',
-                opacity: Math.random() * 0.25 + 0.15
+                opacity: Math.random() * 0.2 + 0.15
             });
             heart.addEventListener('animationend', () => heart.remove());
         }
@@ -506,9 +672,8 @@ document.querySelectorAll('.photo-loading').forEach(placeholder => {
             }
         }, 3000);
 
-        // Сердечки по клику
         document.addEventListener('click', (e) => {
-            if (e.target.closest('.nav-btn') || e.target.closest('.lightbox') || e.target.closest('#photo-strip')) return;
+            if (e.target.closest('.nav-btn') || e.target.closest('.lightbox') || e.target.closest('#photo-strip') || e.target.closest('#main-image-wrapper')) return;
             for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
                     const heart = createHeartElement('heart', {
