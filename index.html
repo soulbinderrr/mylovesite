@@ -5,64 +5,288 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Соня + Вова</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
-    
+
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        
-        /* Фон */
-        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('bg.jpg'); background-size: cover; background-position: center; filter: blur(8px) contrast(80%); z-index: -1; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: #f5f5f5;
+        }
 
-        /* Экраны */
-        .screen { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); padding: 30px; border-radius: 28px; width: 85%; max-width: 320px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.3); display: none; }
-        .active { display: block; }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('6.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(1px) contrast(100%);
+            z-index: -1;
+        }
 
-        /* Элементы */
-        .names { font-size: 1.6rem; font-weight: 700; color: #ff4d6d; margin-bottom: 15px; cursor: pointer; }
-        .days-number { font-size: 4rem; font-weight: bold; color: #ff4d6d; }
-        
-        .btn { border: none; padding: 12px; border-radius: 50px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.2s; color: white; }
+        /* Панель навигации */
+.nav-bar {
+    position: fixed;
+    top: 15px;
+    left: 49%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px);
+    padding: 8px 12px;
+    border-radius: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.4);
+}
+
+.nav-btn {
+    border: none;
+    background: transparent;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: #555;
+    transition: 0.2s;
+    white-space: nowrap;
+    min-width: 90px;          /* 👈 одинаковая минимальная ширина */
+    text-align: center;       /* 👈 текст по центру */
+}
+
+        .nav-btn.active {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        .nav-btn:hover:not(.active) {
+            background: rgba(255, 77, 109, 0.15);
+            color: #ff4d6d;
+        }
+.screen {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    padding: 30px;
+    border-radius: 28px;
+    width: 85%;
+    max-width: 320px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+}
+.active {
+    position: relative;
+    opacity: 0.95;
+    visibility: visible;
+    transform: translateY(0);
+}
+        .names {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff4d6d;
+            margin-bottom:15px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .days-number {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ff4d6d;
+        }
+
+        .days-label {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .main-image {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 20px;
+    margin-top: 15px;
+    margin-left: 17px;
+    display: block;
+}
+
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #ff4d6d;
+        }
+
+        .screen p {
+            color: #555;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.2s;
+            color: white;
+        }
         .btn:active { transform: scale(0.95); }
         .btn-red { background: linear-gradient(135deg, #ff4d6d, #ff758c); }
         .btn-back { background: #e0e0e0; color: #555; margin-top: 20px; }
 
-        /* Фото-полоса */
-        .photo-strip { display: flex; overflow-x: auto; gap: 10px; margin-top: 20px; padding-bottom: 10px; }
-        .photo-strip img { height: 200px; border-radius: 15px; flex-shrink: 0; border: 2px solid white; cursor: pointer; transition: 0.2s; }
-        .photo-strip img:hover { transform: scale(1.03); border-color: #ff4d6d; }
+        .photo-strip {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-top: 20px;
+            padding-bottom: 10px;
+        }
+        .photo-strip img {
+            height: 200px;
+            border-radius: 15px;
+            flex-shrink: 0;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .photo-strip img:hover {
+            transform: scale(1.03);
+            border-color: #ff4d6d;
+        }
 
         /* Лайтбокс */
-        .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; z-index: 10000; backdrop-filter: blur(5px); }
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
         .lightbox.active { display: flex; }
-        .lightbox img { max-width: 80%; max-height: 85vh; border-radius: 20px; border: 3px solid white; box-shadow: 0 10px 40px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease-out; user-select: none; -webkit-user-drag: none; }
-        
-        /* Стрелки */
-        .lightbox-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 3rem; cursor: pointer; z-index: 10001; transition: 0.2s; padding: 20px; user-select: none; }
+        .lightbox img {
+            max-width: 80%;
+            max-height: 85vh;
+            border-radius: 20px;
+            border: 3px solid white;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            animation: zoomIn 0.3s ease-out;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .lightbox-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            z-index: 10001;
+            transition: 0.2s;
+            padding: 20px;
+            user-select: none;
+        }
         .lightbox-arrow:hover { color: #ff4d6d; transform: translateY(-50%) scale(1.2); }
         .lightbox-prev { left: 20px; }
         .lightbox-next { right: 20px; }
-        
-        .lightbox-close { position: absolute; top: 25px; right: 30px; color: white; font-size: 2.5rem; cursor: pointer; z-index: 10001; transition: 0.2s; }
+
+        .lightbox-close {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            z-index: 10001;
+            transition: 0.2s;
+        }
         .lightbox-close:hover { transform: scale(1.2); color: #ff4d6d; }
-        
-        /* Счётчик фото */
-        .lightbox-counter { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 0.9rem; z-index: 10001; }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            z-index: 10001;
+        }
 
         @keyframes zoomIn {
             0% { transform: scale(0.5); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Сердечки */
-        .heart { position: fixed; color: #ff4d6d; pointer-events: none; font-size: 20px; z-index: 9999; animation: moveHeart 1s ease-out forwards; text-shadow: 0 0 5px rgba(255, 77, 109, 0.5); }
+        /* Сердечки по клику */
+        .heart {
+            position: fixed;
+            color: #ff4d6d;
+            pointer-events: none;
+            font-size: 20px;
+            z-index: 9999;
+            animation: moveHeart 1s ease-out forwards;
+            text-shadow: 0 0 5px rgba(255, 77, 109, 0.5);
+        }
         @keyframes moveHeart {
             0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-200px) scale(0.5) rotate(calc(var(--rot) * 1deg)); opacity: 0; }
         }
+
+        /* Дождь из сердечек */
+        .rain-heart {
+            position: fixed;
+            top: -40px;
+            color: #ff4d6d;
+            pointer-events: none;
+            z-index: 2;
+            animation: rainFall linear infinite;
+            opacity: 0.35;
+            font-size: 18px;
+        }
+        @keyframes rainFall {
+            0% { transform: translateY(-5vh) rotate(0deg); opacity: 0.4; }
+            80% { opacity: 0.35; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+        /* Горизонтальная ориентация */
+@media (orientation: landscape) {
+    .screen {
+        margin-top: 60px;
+        margin-right: 17px;
+    }
+}
     </style>
 </head>
 <body>
 
-    <!-- Лайтбокс для просмотра фото -->
+    <!-- Панель вкладок -->
+    <div class="nav-bar">
+        <button class="nav-btn active" data-screen="screen-main">Главная</button>
+        <button class="nav-btn" data-screen="screen-history">❤️</button>
+        <button class="nav-btn" data-screen="screen-photos">Фото</button>
+    </div>
+
+    <!-- Лайтбокс -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
         <span class="lightbox-arrow lightbox-prev" onclick="changePhoto(-1)">&#8249;</span>
@@ -74,20 +298,19 @@
     <div id="screen-main" class="screen active">
         <div class="names" onclick="toggleNames()" id="pair-names">Соня + Вова</div>
         <div class="days-number" id="counter">0</div>
-        <div style="margin-bottom: 20px; color: #555;">дней вместе</div>
-        
-        <button class="btn btn-red" onclick="showScreen('screen-history')">📖 История</button>
-        <button class="btn btn-red" onclick="showScreen('screen-photos')">📷 Фото</button>
+        <div class="days-label">дней вместе</div>
+
+<img src="7.png" alt="Соня и Вова" class="main-image">
     </div>
 
     <div id="screen-history" class="screen">
-        <h2 style="font-family:'Dancing Script'; color: #ff4d6d;">Наша история</h2>
-        <p>Я люблю тебя, солнце <3</p>
-        <button class="btn btn-back" onclick="showScreen('screen-main')">Назад</button>
+        <h2>Напоминание ❤️</h2>
+        <p>Соня, я люблю тебя и дорожу нашими отношениями. Ты лучшее, что есть в моей жизни, самое яркое солнышко, самый милый котёнок</p>
+        <button class="btn btn-back" onclick="showScreen('screen-main')">← На главную</button>
     </div>
 
     <div id="screen-photos" class="screen">
-        <h2 style="font-family:'Dancing Script'; color: #ff4d6d;">Наши моменты</h2>
+        <h2>Наши моменты</h2>
         <div class="photo-strip" id="photo-strip">
             <img src="1.jpg" alt="1">
             <img src="2.jpg" alt="2">
@@ -95,15 +318,48 @@
             <img src="4.jpg" alt="4">
             <img src="5.jpg" alt="5">
         </div>
-        <button class="btn btn-back" onclick="showScreen('screen-main')">Назад</button>
+        <button class="btn btn-back" onclick="showScreen('screen-main')">← На главную</button>
     </div>
 
     <script>
-        // Переключение экранов
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+        // === НАВИГАЦИЯ ПО ВКЛАДКАМ ===
+// === НАВИГАЦИЯ ПО ВКЛАДКАМ ===
+const navButtons = document.querySelectorAll('.nav-btn');
+navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const screenId = btn.getAttribute('data-screen');
+        showScreen(screenId);
+        // Обновляем активную кнопку и возвращаем исходный текст
+        navButtons.forEach(b => {
+            b.classList.remove('active');
+            // Возвращаем исходный текст
+            if (b.getAttribute('data-screen') === 'screen-history') {
+                b.innerHTML = '❤️';
+            }
+            if (b.getAttribute('data-screen') === 'screen-photos') {
+                b.innerHTML = '📷 Фото';
+            }
+        });
+        btn.classList.add('active');
+        // Меняем текст на сердечко для активной кнопки "История"
+        if (screenId === 'screen-history') {
+            btn.innerHTML = '🤍';
         }
+    });
+});
+
+function showScreen(id) {
+    // Скрываем все экраны
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+    });
+    
+    // Показываем нужный с небольшой задержкой для анимации
+    setTimeout(() => {
+        const screen = document.getElementById(id);
+        screen.classList.add('active');
+    }, 0);
+}
 
         // Переключение имён
         const namesElem = document.getElementById('pair-names');
@@ -115,17 +371,15 @@
         const days = Math.floor((new Date() - new Date(2025, 6, 13)) / (1000 * 60 * 60 * 24));
         document.getElementById('counter').innerText = days;
 
-        // === ЛАЙТБОКС С ЛИСТАНИЕМ ===
+        // === ЛАЙТБОКС ===
         let currentPhotoIndex = 0;
         let photosArray = [];
 
-        // Собираем все фото при загрузке
         function updatePhotosArray() {
             photosArray = Array.from(document.querySelectorAll('#photo-strip img'));
         }
         updatePhotosArray();
 
-        // Присваиваем клики на фото
         document.querySelectorAll('#photo-strip img').forEach((img, index) => {
             img.addEventListener('click', () => openLightbox(index));
         });
@@ -139,7 +393,6 @@
 
         function changePhoto(direction) {
             currentPhotoIndex += direction;
-            // Зацикливание
             if (currentPhotoIndex < 0) currentPhotoIndex = photosArray.length - 1;
             if (currentPhotoIndex >= photosArray.length) currentPhotoIndex = 0;
             updateLightboxImage();
@@ -149,7 +402,6 @@
             const img = document.getElementById('lightbox-img');
             const counter = document.getElementById('lightbox-counter');
             img.src = photosArray[currentPhotoIndex].src;
-            // Перезапуск анимации
             img.style.animation = 'none';
             img.offsetHeight;
             img.style.animation = 'zoomIn 0.3s ease-out';
@@ -161,12 +413,10 @@
             document.body.style.overflow = '';
         }
 
-        // Закрытие по клику на фон
         document.getElementById('lightbox').addEventListener('click', function(e) {
             if (e.target === this) closeLightbox();
         });
 
-        // Стрелки с клавиатуры и Escape
         document.addEventListener('keydown', (e) => {
             const lightbox = document.getElementById('lightbox');
             if (!lightbox.classList.contains('active')) return;
@@ -175,23 +425,43 @@
             if (e.key === 'ArrowRight') changePhoto(1);
         });
 
-        // Свайпы на мобильных
         let touchStartX = 0;
         let touchEndX = 0;
-
         document.getElementById('lightbox').addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
         }, {passive: true});
-
         document.getElementById('lightbox').addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].screenX;
             const diff = touchStartX - touchEndX;
-            if (Math.abs(diff) > 50) {
-                changePhoto(diff > 0 ? 1 : -1);
-            }
+            if (Math.abs(diff) > 50) changePhoto(diff > 0 ? 1 : -1);
         });
 
-        // Эффект сердечек
+        // === ДОЖДЬ ИЗ СЕРДЕЧЕК ===
+        function createRainHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'rain-heart';
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (Math.random() * 12 + 12) + 'px';
+            heart.style.animationDuration = (Math.random() * 8 + 12) + 's';
+            heart.style.animationDelay = Math.random() * 10 + 's';
+            heart.style.opacity = Math.random() * 0.25 + 0.15;
+            document.body.appendChild(heart);
+
+            const duration = parseFloat(heart.style.animationDuration) + parseFloat(heart.style.animationDelay);
+            setTimeout(() => heart.remove(), duration * 1000);
+        }
+
+        for (let i = 0; i < 8; i++) {
+            setTimeout(() => createRainHeart(), Math.random() * 8000);
+        }
+        setInterval(() => {
+            if (document.querySelectorAll('.rain-heart').length < 12) {
+                createRainHeart();
+            }
+        }, 3000);
+
+        // Сердечки по клику
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('btn') || e.target.closest('.lightbox') || e.target.closest('#photo-strip')) return;
             for (let i = 0; i < 5; i++) {
