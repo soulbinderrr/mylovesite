@@ -154,6 +154,12 @@
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
+-webkit -user -drag: none;
+-webkit-user-select: none;
+- mOz-user-select: none;
+-user-se.lect: none;
+user-select: none;
+pointer-events: auto;
         }
 
         .main-image.top {
@@ -549,6 +555,10 @@
         // === ПЕРЕКЛЮЧЕНИЕ ГЛАВНОЙ КАРТИНКИ (один раз) ===
         const imgTop = document.getElementById('main-image-top');
         const wrapper = document.getElementById('main-image-wrapper');
+        // Запрет контекстного меню на картинке
+wrapper.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+});
         let hasSwitched = false;
 
         wrapper.addEventListener('click', () => {
