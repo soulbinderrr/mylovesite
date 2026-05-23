@@ -33,9 +33,19 @@
         /* Лайтбокс */
         .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; z-index: 10000; backdrop-filter: blur(5px); }
         .lightbox.active { display: flex; }
-        .lightbox img { max-width: 90%; max-height: 85vh; border-radius: 20px; border: 3px solid white; box-shadow: 0 10px 40px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease-out; }
-        .lightbox-close { position: absolute; top: 25px; right: 30px; color: white; font-size: 2rem; cursor: pointer; z-index: 10001; transition: 0.2s; }
+        .lightbox img { max-width: 80%; max-height: 85vh; border-radius: 20px; border: 3px solid white; box-shadow: 0 10px 40px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease-out; user-select: none; -webkit-user-drag: none; }
+        
+        /* Стрелки */
+        .lightbox-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 3rem; cursor: pointer; z-index: 10001; transition: 0.2s; padding: 20px; user-select: none; }
+        .lightbox-arrow:hover { color: #ff4d6d; transform: translateY(-50%) scale(1.2); }
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+        
+        .lightbox-close { position: absolute; top: 25px; right: 30px; color: white; font-size: 2.5rem; cursor: pointer; z-index: 10001; transition: 0.2s; }
         .lightbox-close:hover { transform: scale(1.2); color: #ff4d6d; }
+        
+        /* Счётчик фото */
+        .lightbox-counter { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 0.9rem; z-index: 10001; }
 
         @keyframes zoomIn {
             0% { transform: scale(0.5); opacity: 0; }
@@ -53,9 +63,12 @@
 <body>
 
     <!-- Лайтбокс для просмотра фото -->
-    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-        <span class="lightbox-close">&times;</span>
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <span class="lightbox-arrow lightbox-prev" onclick="changePhoto(-1)">&#8249;</span>
+        <span class="lightbox-arrow lightbox-next" onclick="changePhoto(1)">&#8250;</span>
         <img src="" alt="Фото" id="lightbox-img">
+        <div class="lightbox-counter" id="lightbox-counter"></div>
     </div>
 
     <div id="screen-main" class="screen active">
@@ -76,11 +89,11 @@
     <div id="screen-photos" class="screen">
         <h2 style="font-family:'Dancing Script'; color: #ff4d6d;">Наши моменты</h2>
         <div class="photo-strip" id="photo-strip">
-            <img src="1.jpg" alt="1" onclick="openLightbox(this.src)">
-            <img src="2.jpg" alt="2" onclick="openLightbox(this.src)">
-            <img src="3.jpg" alt="3" onclick="openLightbox(this.src)">
-            <img src="4.jpg" alt="4" onclick="openLightbox(this.src)">
-            <img src="5.jpg" alt="5" onclick="openLightbox(this.src)">
+            <img src="1.jpg" alt="1">
+            <img src="2.jpg" alt="2">
+            <img src="3.jpg" alt="3">
+            <img src="4.jpg" alt="4">
+            <img src="5.jpg" alt="5">
         </div>
         <button class="btn btn-back" onclick="showScreen('screen-main')">Назад</button>
     </div>
@@ -102,11 +115,45 @@
         const days = Math.floor((new Date() - new Date(2025, 6, 13)) / (1000 * 60 * 60 * 24));
         document.getElementById('counter').innerText = days;
 
-        // Лайтбокс
-        function openLightbox(src) {
-            document.getElementById('lightbox-img').src = src;
+        // === ЛАЙТБОКС С ЛИСТАНИЕМ ===
+        let currentPhotoIndex = 0;
+        let photosArray = [];
+
+        // Собираем все фото при загрузке
+        function updatePhotosArray() {
+            photosArray = Array.from(document.querySelectorAll('#photo-strip img'));
+        }
+        updatePhotosArray();
+
+        // Присваиваем клики на фото
+        document.querySelectorAll('#photo-strip img').forEach((img, index) => {
+            img.addEventListener('click', () => openLightbox(index));
+        });
+
+        function openLightbox(index) {
+            currentPhotoIndex = index;
+            updateLightboxImage();
             document.getElementById('lightbox').classList.add('active');
             document.body.style.overflow = 'hidden';
+        }
+
+        function changePhoto(direction) {
+            currentPhotoIndex += direction;
+            // Зацикливание
+            if (currentPhotoIndex < 0) currentPhotoIndex = photosArray.length - 1;
+            if (currentPhotoIndex >= photosArray.length) currentPhotoIndex = 0;
+            updateLightboxImage();
+        }
+
+        function updateLightboxImage() {
+            const img = document.getElementById('lightbox-img');
+            const counter = document.getElementById('lightbox-counter');
+            img.src = photosArray[currentPhotoIndex].src;
+            // Перезапуск анимации
+            img.style.animation = 'none';
+            img.offsetHeight;
+            img.style.animation = 'zoomIn 0.3s ease-out';
+            counter.innerText = `${currentPhotoIndex + 1} / ${photosArray.length}`;
         }
 
         function closeLightbox() {
@@ -114,14 +161,39 @@
             document.body.style.overflow = '';
         }
 
-        // Закрытие по Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeLightbox();
+        // Закрытие по клику на фон
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
         });
 
-        // Эффект сердечек (исключаем фото из лайтбокса)
+        // Стрелки с клавиатуры и Escape
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox');
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') changePhoto(-1);
+            if (e.key === 'ArrowRight') changePhoto(1);
+        });
+
+        // Свайпы на мобильных
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('lightbox').addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        document.getElementById('lightbox').addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                changePhoto(diff > 0 ? 1 : -1);
+            }
+        });
+
+        // Эффект сердечек
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn') || e.target.closest('.lightbox')) return;
+            if (e.target.classList.contains('btn') || e.target.closest('.lightbox') || e.target.closest('#photo-strip')) return;
             for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
