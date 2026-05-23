@@ -27,7 +27,20 @@
 
         /* Фото-полоса */
         .photo-strip { display: flex; overflow-x: auto; gap: 10px; margin-top: 20px; padding-bottom: 10px; }
-        .photo-strip img { height: 200px; border-radius: 15px; flex-shrink: 0; border: 2px solid white; }
+        .photo-strip img { height: 200px; border-radius: 15px; flex-shrink: 0; border: 2px solid white; cursor: pointer; transition: 0.2s; }
+        .photo-strip img:hover { transform: scale(1.03); border-color: #ff4d6d; }
+
+        /* Лайтбокс */
+        .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; z-index: 10000; backdrop-filter: blur(5px); }
+        .lightbox.active { display: flex; }
+        .lightbox img { max-width: 90%; max-height: 85vh; border-radius: 20px; border: 3px solid white; box-shadow: 0 10px 40px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease-out; }
+        .lightbox-close { position: absolute; top: 25px; right: 30px; color: white; font-size: 2rem; cursor: pointer; z-index: 10001; transition: 0.2s; }
+        .lightbox-close:hover { transform: scale(1.2); color: #ff4d6d; }
+
+        @keyframes zoomIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
         /* Сердечки */
         .heart { position: fixed; color: #ff4d6d; pointer-events: none; font-size: 20px; z-index: 9999; animation: moveHeart 1s ease-out forwards; text-shadow: 0 0 5px rgba(255, 77, 109, 0.5); }
@@ -38,6 +51,12 @@
     </style>
 </head>
 <body>
+
+    <!-- Лайтбокс для просмотра фото -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="Фото" id="lightbox-img">
+    </div>
 
     <div id="screen-main" class="screen active">
         <div class="names" onclick="toggleNames()" id="pair-names">Соня + Вова</div>
@@ -50,16 +69,18 @@
 
     <div id="screen-history" class="screen">
         <h2 style="font-family:'Dancing Script'; color: #ff4d6d;">Наша история</h2>
-        <p>Здесь надо писать историю любви. </p>
-        <p>Ты любишь историю.</p>
-        <p>А я люблю тебя <3 </p>
+        <p>Здесь можно написать вашу историю любви...</p>
         <button class="btn btn-back" onclick="showScreen('screen-main')">Назад</button>
     </div>
 
     <div id="screen-photos" class="screen">
         <h2 style="font-family:'Dancing Script'; color: #ff4d6d;">Наши моменты</h2>
-        <div class="photo-strip">
-            <img src="1.jpg" alt="1"><img src="2.jpg" alt="2"><img src="3.jpg" alt="3"><img src="4.jpg" alt="4"><img src="5.jpg" alt="5">
+        <div class="photo-strip" id="photo-strip">
+            <img src="1.jpg" alt="1" onclick="openLightbox(this.src)">
+            <img src="2.jpg" alt="2" onclick="openLightbox(this.src)">
+            <img src="3.jpg" alt="3" onclick="openLightbox(this.src)">
+            <img src="4.jpg" alt="4" onclick="openLightbox(this.src)">
+            <img src="5.jpg" alt="5" onclick="openLightbox(this.src)">
         </div>
         <button class="btn btn-back" onclick="showScreen('screen-main')">Назад</button>
     </div>
@@ -81,9 +102,26 @@
         const days = Math.floor((new Date() - new Date(2025, 6, 13)) / (1000 * 60 * 60 * 24));
         document.getElementById('counter').innerText = days;
 
-        // Эффект сердечек
+        // Лайтбокс
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Закрытие по Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Эффект сердечек (исключаем фото из лайтбокса)
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn')) return;
+            if (e.target.classList.contains('btn') || e.target.closest('.lightbox')) return;
             for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
