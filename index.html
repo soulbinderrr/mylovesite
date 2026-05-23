@@ -34,36 +34,36 @@
         }
 
         /* Панель навигации */
-.nav-bar {
-    position: fixed;
-    top: 15px;
-    left: 49%;
-    transform: translateX(-50%);
-    z-index: 10;
-    display: flex;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(20px);
-    padding: 8px 12px;
-    border-radius: 40px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    border: 1px solid rgba(255,255,255,0.4);
-}
+        .nav-bar {
+            position: fixed;
+            top: 15px;
+            left: 49%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            padding: 8px 12px;
+            border-radius: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
 
-.nav-btn {
-    border: none;
-    background: transparent;
-    padding: 10px 18px;
-    border-radius: 30px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    color: #555;
-    transition: 0.2s;
-    white-space: nowrap;
-    min-width: 90px;          /* 👈 одинаковая минимальная ширина */
-    text-align: center;       /* 👈 текст по центру */
-}
+        .nav-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: #555;
+            transition: 0.2s;
+            white-space: nowrap;
+            min-width: 90px;
+            text-align: center;
+        }
 
         .nav-btn.active {
             background: #ff4d6d;
@@ -74,33 +74,36 @@
             background: rgba(255, 77, 109, 0.15);
             color: #ff4d6d;
         }
-.screen {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(15px);
-    padding: 30px;
-    border-radius: 28px;
-    width: 85%;
-    max-width: 320px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    position: absolute;
-    z-index: 1;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(15px);
-    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
-}
-.active {
-    position: relative;
-    opacity: 0.95;
-    visibility: visible;
-    transform: translateY(0);
-}
+
+        .screen {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 28px;
+            width: 85%;
+            max-width: 320px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: absolute;
+            z-index: 1;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+        }
+
+        .active {
+            position: relative;
+            opacity: 0.95;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
         .names {
             font-size: 2rem;
             font-weight: 700;
             color: #ff4d6d;
-            margin-bottom:15px;
+            margin-bottom: 15px;
             margin-top: 10px;
             cursor: pointer;
         }
@@ -115,14 +118,15 @@
             color: #555;
             margin-bottom: 20px;
         }
+
         .main-image {
-    width: 100%;
-    max-width: 250px;
-    border-radius: 20px;
-    margin-top: 15px;
-    margin-left: 17px;
-    display: block;
-}
+            width: 100%;
+            max-width: 250px;
+            border-radius: 20px;
+            margin-top: 15px;
+            margin-left: 17px;
+            display: block;
+        }
 
         h2 {
             font-family: 'Dancing Script', cursive;
@@ -133,21 +137,6 @@
             color: #555;
         }
 
-        .btn {
-            border: none;
-            padding: 12px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            transition: 0.2s;
-            color: white;
-        }
-        .btn:active { transform: scale(0.95); }
-        .btn-red { background: linear-gradient(135deg, #ff4d6d, #ff758c); }
-        .btn-back { background: #e0e0e0; color: #555; margin-top: 20px; }
-
         .photo-strip {
             display: flex;
             overflow-x: auto;
@@ -155,6 +144,7 @@
             margin-top: 20px;
             padding-bottom: 10px;
         }
+
         .photo-strip img {
             height: 200px;
             border-radius: 15px;
@@ -163,9 +153,44 @@
             cursor: pointer;
             transition: 0.2s;
         }
+
         .photo-strip img:hover {
             transform: scale(1.03);
             border-color: #ff4d6d;
+        }
+
+        /* Заглушка загрузки фото */
+        .photo-loading {
+            height: 200px;
+            min-width: 140px;
+            border-radius: 15px;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,77,109,0.2);
+            border-top-color: #ff4d6d;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .photo-strip img.loaded {
+            animation: fadeInPhoto 0.4s ease;
+        }
+
+        @keyframes fadeInPhoto {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* Лайтбокс */
@@ -182,7 +207,9 @@
             z-index: 10000;
             backdrop-filter: blur(5px);
         }
+
         .lightbox.active { display: flex; }
+
         .lightbox img {
             max-width: 80%;
             max-height: 85vh;
@@ -206,6 +233,7 @@
             padding: 20px;
             user-select: none;
         }
+
         .lightbox-arrow:hover { color: #ff4d6d; transform: translateY(-50%) scale(1.2); }
         .lightbox-prev { left: 20px; }
         .lightbox-next { right: 20px; }
@@ -220,6 +248,7 @@
             z-index: 10001;
             transition: 0.2s;
         }
+
         .lightbox-close:hover { transform: scale(1.2); color: #ff4d6d; }
 
         .lightbox-counter {
@@ -247,6 +276,7 @@
             animation: moveHeart 1s ease-out forwards;
             text-shadow: 0 0 5px rgba(255, 77, 109, 0.5);
         }
+
         @keyframes moveHeart {
             0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-200px) scale(0.5) rotate(calc(var(--rot) * 1deg)); opacity: 0; }
@@ -263,18 +293,20 @@
             opacity: 0.35;
             font-size: 18px;
         }
+
         @keyframes rainFall {
             0% { transform: translateY(-5vh) rotate(0deg); opacity: 0.4; }
             80% { opacity: 0.35; }
             100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
         }
+
         /* Горизонтальная ориентация */
-@media (orientation: landscape) {
-    .screen {
-        margin-top: 60px;
-        margin-right: 17px;
-    }
-}
+        @media (orientation: landscape) {
+            .screen {
+                margin-top: 60px;
+                margin-right: 17px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -299,67 +331,55 @@
         <div class="names" onclick="toggleNames()" id="pair-names">Соня + Вова</div>
         <div class="days-number" id="counter">0</div>
         <div class="days-label">дней вместе</div>
-
-<img src="7.png" alt="Соня и Вова" class="main-image">
+        <img src="7.png" alt="Соня и Вова" class="main-image">
     </div>
 
     <div id="screen-history" class="screen">
         <h2>Напоминание ❤️</h2>
         <p>Соня, я люблю тебя и дорожу нашими отношениями. Ты лучшее, что есть в моей жизни, самое яркое солнышко, самый милый котёнок</p>
-        <button class="btn btn-back" onclick="showScreen('screen-main')">← На главную</button>
     </div>
 
     <div id="screen-photos" class="screen">
         <h2>Наши моменты</h2>
         <div class="photo-strip" id="photo-strip">
-            <img src="1.jpg" alt="1">
-            <img src="2.jpg" alt="2">
-            <img src="3.jpg" alt="3">
-            <img src="4.jpg" alt="4">
-            <img src="5.jpg" alt="5">
+            <div class="photo-loading" data-src="1.jpg"><div class="spinner"></div></div>
+            <div class="photo-loading" data-src="2.jpg"><div class="spinner"></div></div>
+            <div class="photo-loading" data-src="3.jpg"><div class="spinner"></div></div>
+            <div class="photo-loading" data-src="4.jpg"><div class="spinner"></div></div>
+            <div class="photo-loading" data-src="5.jpg"><div class="spinner"></div></div>
         </div>
-        <button class="btn btn-back" onclick="showScreen('screen-main')">← На главную</button>
     </div>
 
     <script>
         // === НАВИГАЦИЯ ПО ВКЛАДКАМ ===
-// === НАВИГАЦИЯ ПО ВКЛАДКАМ ===
-const navButtons = document.querySelectorAll('.nav-btn');
-navButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const screenId = btn.getAttribute('data-screen');
-        showScreen(screenId);
-        // Обновляем активную кнопку и возвращаем исходный текст
-        navButtons.forEach(b => {
-            b.classList.remove('active');
-            // Возвращаем исходный текст
-            if (b.getAttribute('data-screen') === 'screen-history') {
-                b.innerHTML = '❤️';
-            }
-            if (b.getAttribute('data-screen') === 'screen-photos') {
-                b.innerHTML = '📷 Фото';
-            }
+        const navButtons = document.querySelectorAll('.nav-btn');
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const screenId = btn.getAttribute('data-screen');
+                showScreen(screenId);
+                navButtons.forEach(b => {
+                    b.classList.remove('active');
+                    if (b.getAttribute('data-screen') === 'screen-history') {
+                        b.innerHTML = '❤️';
+                    }
+                    if (b.getAttribute('data-screen') === 'screen-photos') {
+                        b.innerHTML = '📷 Фото';
+                    }
+                });
+                btn.classList.add('active');
+                if (screenId === 'screen-history') {
+                    btn.innerHTML = '🤍';
+                }
+            });
         });
-        btn.classList.add('active');
-        // Меняем текст на сердечко для активной кнопки "История"
-        if (screenId === 'screen-history') {
-            btn.innerHTML = '🤍';
-        }
-    });
-});
 
-function showScreen(id) {
-    // Скрываем все экраны
-    document.querySelectorAll('.screen').forEach(s => {
-        s.classList.remove('active');
-    });
-    
-    // Показываем нужный с небольшой задержкой для анимации
-    setTimeout(() => {
-        const screen = document.getElementById(id);
-        screen.classList.add('active');
-    }, 0);
-}
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            setTimeout(() => {
+                const screen = document.getElementById(id);
+                screen.classList.add('active');
+            }, 0);
+        }
 
         // Переключение имён
         const namesElem = document.getElementById('pair-names');
@@ -378,11 +398,30 @@ function showScreen(id) {
         function updatePhotosArray() {
             photosArray = Array.from(document.querySelectorAll('#photo-strip img'));
         }
-        updatePhotosArray();
 
-        document.querySelectorAll('#photo-strip img').forEach((img, index) => {
-            img.addEventListener('click', () => openLightbox(index));
+// Ленивая загрузка фото
+document.querySelectorAll('.photo-loading').forEach(placeholder => {
+    const src = placeholder.getAttribute('data-src');
+    const img = new Image();
+    img.onload = () => {
+        // Создаём новый img элемент
+        const newImg = document.createElement('img');
+        newImg.className = 'loaded';
+        newImg.src = src;
+        newImg.alt = src;
+        // Заменяем заглушку на фото
+        placeholder.replaceWith(newImg);
+        updatePhotosArray();
+        newImg.addEventListener('click', () => {
+            const index = photosArray.indexOf(newImg);
+            if (index >= 0) openLightbox(index);
         });
+    };
+    img.onerror = () => {
+        placeholder.innerHTML = '❌';
+    };
+    img.src = src; // Запускаем загрузку
+});
 
         function openLightbox(index) {
             currentPhotoIndex = index;
@@ -436,20 +475,26 @@ function showScreen(id) {
             if (Math.abs(diff) > 50) changePhoto(diff > 0 ? 1 : -1);
         });
 
-        // === ДОЖДЬ ИЗ СЕРДЕЧЕК ===
-        function createRainHeart() {
+        // === СЕРДЕЧКИ ===
+        function createHeartElement(className, styles = {}) {
             const heart = document.createElement('div');
-            heart.className = 'rain-heart';
+            heart.className = className;
             heart.innerHTML = '❤';
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.fontSize = (Math.random() * 12 + 12) + 'px';
-            heart.style.animationDuration = (Math.random() * 8 + 12) + 's';
-            heart.style.animationDelay = Math.random() * 10 + 's';
-            heart.style.opacity = Math.random() * 0.25 + 0.15;
+            Object.assign(heart.style, styles);
             document.body.appendChild(heart);
+            return heart;
+        }
 
-            const duration = parseFloat(heart.style.animationDuration) + parseFloat(heart.style.animationDelay);
-            setTimeout(() => heart.remove(), duration * 1000);
+        // Дождь из сердечек
+        function createRainHeart() {
+            const heart = createHeartElement('rain-heart', {
+                left: Math.random() * 100 + '%',
+                fontSize: (Math.random() * 12 + 12) + 'px',
+                animationDuration: (Math.random() * 8 + 12) + 's',
+                animationDelay: Math.random() * 10 + 's',
+                opacity: Math.random() * 0.25 + 0.15
+            });
+            heart.addEventListener('animationend', () => heart.remove());
         }
 
         for (let i = 0; i < 8; i++) {
@@ -463,17 +508,15 @@ function showScreen(id) {
 
         // Сердечки по клику
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn') || e.target.closest('.lightbox') || e.target.closest('#photo-strip')) return;
+            if (e.target.closest('.nav-btn') || e.target.closest('.lightbox') || e.target.closest('#photo-strip')) return;
             for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
-                    const heart = document.createElement('div');
-                    heart.className = 'heart';
-                    heart.innerHTML = '❤';
-                    heart.style.setProperty('--rot', (Math.random() - 0.5) * 100);
-                    heart.style.left = (e.clientX + (Math.random() * 40 - 20)) + 'px';
-                    heart.style.top = (e.clientY - 20) + 'px';
-                    document.body.appendChild(heart);
-                    setTimeout(() => heart.remove(), 1000);
+                    const heart = createHeartElement('heart', {
+                        '--rot': (Math.random() - 0.5) * 100,
+                        left: (e.clientX + (Math.random() * 40 - 20)) + 'px',
+                        top: (e.clientY - 20) + 'px'
+                    });
+                    heart.addEventListener('animationend', () => heart.remove());
                 }, i * 50);
             }
         });
